@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lessons Platform - The Golden Hand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d9ff;
+            --primary-dark: #00a8cc;
+            --accent: #ff006e;
+            --success: #00f5a0;
+            --warning: #ffd60a;
+            --danger: #ff006e;
+            --bg-dark: #0a0e27;
+            --bg-darker: #050812;
+            --bg-card: #1a1f3a;
+            --bg-hover: #252d4a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8d4;
+            --border-color: #2a3250;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(180deg, var(--bg-card) 0%, rgba(26, 31, 58, 0.8) 100%);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 217, 255, 0.6); }
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navigation */
+        nav.desktop-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav.desktop-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav.desktop-nav a:hover {
+            color: var(--primary);
+        }
+
+        nav.desktop-nav a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        nav.desktop-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        nav.desktop-nav a:hover::after,
+        nav.desktop-nav a.active::after {
+            width: 100%;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Section Container */
+        .section-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Subjects Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .subject-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(255, 0, 110, 0.05) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .subject-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .subject-card:hover::before {
+            left: 100%;
+        }
+
+        .subject-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .subject-card h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .subject-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+
+        .subject-grade {
+            display: inline-block;
+            background: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .subject-card a {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--bg-dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .subject-card a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state .subtitle {
+            color: var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        /* Coming Soon Section */
+        .coming-soon {
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.1) 0%, rgba(255, 0, 110, 0.05) 100%);
+            border: 1px solid rgba(255, 214, 10, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .coming-soon h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--warning);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .coming-soon p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 1rem;
+            }
+
+            nav.desktop-nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .hero-section h2 {
+                font-size: 1.75rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .section-container {
+                padding: 1.5rem;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .section-header h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <!-- Logo -->
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h1 class="logo-text">The Golden Hand</h1>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <a href="{{ url_for('main.index') }}">Home</a>
+                <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('lessons.index') }}" class="active">Lessons</a>
+                <a href="{{ url_for('quiz.index') }}">Quiz</a>
+                <a href="{{ url_for('audio.index') }}">Audio</a>
+                <a href="{{ url_for('community.index') }}">Community</a>
+                <a href="{{ url_for('ai.index') }}">iKhaya AI</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h2>📚 Lessons Platform</h2>
+            <p>Structured, curriculum-aligned education for Grades 1-12 & Tertiary</p>
+        </div>
+
+        <!-- Subjects Section -->
+        <div class="section-container">
+            <div class="section-header">
+                <h3>Available Subjects</h3>
+                <p>Choose a subject to explore lessons and expand your knowledge</p>
+            </div>
+
+            <div class="subjects-grid">
+                <!-- Mathematics -->
+                <div class="subject-card">
+                    <div class="subject-icon">📐</div>
+                    <h4>Mathematics</h4>
+                    <p>Master algebra, geometry, calculus, and problem-solving skills</p>
+                    <span class="subject-grade">Grade 10</span>
+                    <a href="#">
+                        View Lessons <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </a>
+                </div>
+
+                <!-- Science -->
+                <div class="subject-card">
+                    <div class="subject-icon">🔬</div>
+                    <h4>Science</h4>
+                    <p>Explore physics, chemistry, biology, and scientific methods</p>
+                    <span class="subject-grade">Grade 9</span>
+                    <a href="#">
+                        View Lessons <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </a>
+                </div>
+
+                <!-- English -->
+                <div class="subject-card">
+                    <div class="subject-icon">📖</div>
+                    <h4>English</h4>
+                    <p>Develop reading, writing, and communication skills</p>
+                    <span class="subject-grade">Grade 11</span>
+                    <a href="#">
+                        View Lessons <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </a>
+                </div>
+
+                <!-- History -->
+                <div class="subject-card">
+                    <div class="subject-icon">🏛️</div>
+                    <h4>History</h4>
+                    <p>Learn about world history, African heritage, and cultural evolution</p>
+                    <span class="subject-grade">Grade 12</span>
+                    <a href="#">
+                        View Lessons <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </a>
+                </div>
+
+                <!-- Programming -->
+                <div class="subject-card">
+                    <div class="subject-icon">💻</div>
+                    <h4>Programming</h4>
+                    <p>Learn coding fundamentals, web development, and software design</p>
+                    <span class="subject-grade">Tertiary</span>
+                    <a href="#">
+                        View Lessons <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </a>
+                </div>
+
+                <!-- Business Studies -->
+                <div class="subject-card">
+                    <div class="subject-icon">💼</div>
+                    <h4>Business Studies</h4>
+                    <p>Understand economics, entrepreneurship, and business management</p>
+                    <span class="subject-grade">Grade 11</span>
+                    <a href="#">
+                        View Lessons <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Coming Soon Section -->
+            <div class="coming-soon">
+                <h3>
+                    <i class="fas fa-star"></i>
+                    Coming Soon
+                </h3>
+                <p>Interactive lessons, video tutorials, practice exercises, and progress tracking are being developed to enhance your learning experience!</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 The Golden Hand. All rights reserved. | Empowering African Learners</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const header = document.querySelector('header');
+
+        menuBtn?.addEventListener('click', () => {
+            header.classList.toggle('mobile-menu-open');
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

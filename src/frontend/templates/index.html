@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>The Golden Hand - SIFISO SmartStudy SA</title>
+    <meta content="SIFISO SmartStudy SA - Reimagining African education through a holistic, AI-powered learning platform." name="description"/>
+    <meta content="Education, Africa, SmartStudy, AI Learning, Digital Literacy, Youth Empowerment" name="keywords"/>
+    <meta content="Sifiso Ndlovu" name="author"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --primary: #00d9ff;
+            --primary-dark: #00a8cc;
+            --accent: #ff006e;
+            --success: #00f5a0;
+            --warning: #ffd60a;
+            --danger: #ff006e;
+            --bg-dark: #0a0e27;
+            --bg-darker: #050812;
+            --bg-card: #1a1f3a;
+            --bg-hover: #252d4a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8d4;
+            --border-color: #2a3250;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(180deg, var(--bg-card) 0%, rgba(26, 31, 58, 0.8) 100%);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 217, 255, 0.6); }
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navigation */
+        nav.desktop-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav.desktop-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav.desktop-nav a:hover {
+            color: var(--primary);
+        }
+
+        nav.desktop-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        nav.desktop-nav a:hover::after {
+            width: 100%;
+        }
+
+        nav.desktop-nav a.dashboard-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--bg-dark);
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        nav.desktop-nav a.dashboard-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Mobile Navigation */
+        nav.mobile-nav {
+            display: none;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+        }
+
+        nav.mobile-nav.active {
+            display: block;
+        }
+
+        nav.mobile-nav a {
+            display: block;
+            padding: 1rem 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        nav.mobile-nav a:hover {
+            background: var(--bg-hover);
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(255, 0, 110, 0.05) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--bg-dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .hero-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.2);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 4rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        section > .max-w-7xl {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 800px;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Feature List */
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 1rem;
+            }
+
+            nav.desktop-nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .hero-text p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+
+            section h2 {
+                font-size: 1.75rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <!-- Logo -->
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h1 class="logo-text">The Golden Hand</h1>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <a href="#vision">The Vision</a>
+                <a href="#structure">The Structure</a>
+                <a href="#journey">Learner's Journey</a>
+                <a href="#accessibility">Accessibility</a>
+                <a href="#opportunity">The Opportunity</a>
+                <a href="{{ url_for('main.dashboard') }}" class="dashboard-btn">Dashboard</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav" id="mobile-menu">
+            <a href="#vision">The Vision</a>
+            <a href="#structure">The Structure</a>
+            <a href="#journey">Learner's Journey</a>
+            <a href="#accessibility">Accessibility</a>
+            <a href="#opportunity">The Opportunity</a>
+            <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Reimagining Education for Africa's Future</h1>
+                <p>A holistic, AI-powered learning platform designed to empower, inspire, and equip Africa's next generation of creators and leaders.</p>
+                <div class="hero-buttons">
+                    <a href="#opportunity" class="btn btn-primary">Join the Movement</a>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Get Early Access</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img alt="African students engaged in digital learning with tablets and computers in a modern classroom setting" src="{{ url_for('static', filename='images/vision.jpg') }}"/>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Golden Hand Structure -->
+    <section id="structure">
+        <div class="max-w-7xl">
+            <h2>The Golden Hand Learning Model</h2>
+            <p class="section-subtitle">Our platform is designed around "The Golden Hand", a unique five-app structure that mirrors the fingers of a hand — each one an essential function of holistic learning.</p>
+
+            <div class="cards-grid">
+                <!-- Lessons Platform -->
+                <div class="card">
+                    <div class="card-icon">📚</div>
+                    <h3>Lessons Platform</h3>
+                    <p>Structured, curriculum-aligned education for Grades 1–12 & Tertiary.</p>
+                    <img alt="Icon representing Lessons Platform" src="{{ url_for('static', filename='images/lessons.jpg') }}"/>
+                </div>
+
+                <!-- Quiz App -->
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Quiz App</h3>
+                    <p>Gamified, critical thinking-based mastery through interactive quizzes.</p>
+                    <img alt="Icon representing Quiz App" src="{{ url_for('static', filename='images/quiz.jpg') }}"/>
+                </div>
+
+                <!-- Audio Learning -->
+                <div class="card">
+                    <div class="card-icon">🔊</div>
+                    <h3>Audio Learning</h3>
+                    <p>Accessible offline education by subject and grade through audio content.</p>
+                    <img alt="Icon representing Audio Learning" src="{{ url_for('static', filename='images/audio.jpg') }}"/>
+                </div>
+
+                <!-- SISONKE Community -->
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <h3>SISONKE Community</h3>
+                    <p>Mentorship, peer support, collaboration, and startup creation hub.</p>
+                    <img alt="Icon representing SISONKE Community" src="{{ url_for('static', filename='images/community.jpg') }}"/>
+                </div>
+
+                <!-- iKhaya AI -->
+                <div class="card">
+                    <div class="card-icon">🎓</div>
+                    <h3>iKhaya AI</h3>
+                    <p>Homegrown African AI hub where learners don't just use AI, they build with it.</p>
+                    <img alt="Icon representing iKhaya AI" src="{{ url_for('static', filename='images/ai.jpg') }}"/>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary">Register Your School or Organization</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Vision Section -->
+    <section id="vision">
+        <div class="max-w-7xl">
+            <h2>Reimagining Education for Africa's Future</h2>
+            <p class="section-subtitle">We believe that every African child deserves access to world-class education that equips them not just with knowledge, but with the skills, confidence, and mindset to create their own opportunities.</p>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Innovation-Driven</h4>
+                        <p>Cutting-edge AI and technology integrated seamlessly into the learning experience.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Globally Accessible</h4>
+                        <p>Designed for Africa, accessible worldwide. Breaking geographical barriers to quality education.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Community-Centered</h4>
+                        <p>Built on collaboration, mentorship, and peer support for holistic development.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Entrepreneurship Focus</h4>
+                        <p>Equipping learners to build startups and create their own futures.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-accessibility"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Inclusive & Accessible</h4>
+                        <p>Designed for all learners, with comprehensive accessibility features.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Data-Driven Progress</h4>
+                        <p>Real-time insights and personalized learning paths for every student.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learner's Journey Section -->
+    <section id="journey">
+        <div class="max-w-7xl">
+            <h2>The Learner's Journey</h2>
+            <p class="section-subtitle">From curious student to confident creator — watch how learners transform through The Golden Hand platform.</p>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Learn</h4>
+                        <p>Access structured lessons aligned with your curriculum and learning pace.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Master</h4>
+                        <p>Test your knowledge through gamified quizzes and interactive challenges.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Connect</h4>
+                        <p>Join a vibrant community of learners, mentors, and innovators.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Create</h4>
+                        <p>Build with AI and technology to bring your ideas to life.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Succeed</h4>
+                        <p>Launch your startup or pursue your dream career with confidence.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accessibility Section -->
+    <section id="accessibility">
+        <div class="max-w-7xl">
+            <h2>Accessibility & Inclusivity</h2>
+            <p class="section-subtitle">Education should be accessible to everyone. That's why we've built The Golden Hand with comprehensive accessibility features.</p>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Audio-First Learning</h4>
+                        <p>Full audio content for offline access and auditory learners.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Visual Accessibility</h4>
+                        <p>High contrast modes and screen reader optimization.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Mobile-Optimized</h4>
+                        <p>Seamless experience on any device, even with limited connectivity.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Multi-Language Support</h4>
+                        <p>Learn in your preferred language with full localization.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Opportunity Section -->
+    <section id="opportunity">
+        <div class="max-w-7xl">
+            <h2>The Opportunity</h2>
+            <p class="section-subtitle">Join us in revolutionizing African education. Whether you're a student, educator, parent, or organization, there's a place for you in The Golden Hand community.</p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>For Students</h3>
+                    <p>Access world-class education, connect with peers, and build your future with confidence.</p>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary" style="margin-top: auto;">Start Learning Today</a>
+                </div>
+
+                <div class="card">
+                    <h3>For Educators</h3>
+                    <p>Empower your students with innovative tools and comprehensive learning resources.</p>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary" style="margin-top: auto;">Register Your School</a>
+                </div>
+
+                <div class="card">
+                    <h3>For Organizations</h3>
+                    <p>Partner with us to bring quality education to your community.</p>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary" style="margin-top: auto;">Partner With Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>The Golden Hand</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Reimagining African education through a holistic, AI-powered learning platform.</p>
+                <div class="social-links">
+                    <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="{{ url_for('lessons.index') }}">Lessons</a></li>
+                    <li><a href="{{ url_for('quiz.index') }}">Quiz</a></li>
+                    <li><a href="{{ url_for('audio.index') }}">Audio</a></li>
+                    <li><a href="{{ url_for('community.index') }}">Community</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                    <li><a href="#">Feedback</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Sitemap</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 SIFISO SmartStudy SA. All rights reserved. | Empowering African Learners</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn?.addEventListener('click', () => {
+            mobileMenu?.classList.toggle('active');
+        });
+
+        // Close mobile menu when a link is clicked
+        const mobileLinks = mobileMenu?.querySelectorAll('a');
+        mobileLinks?.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu?.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
