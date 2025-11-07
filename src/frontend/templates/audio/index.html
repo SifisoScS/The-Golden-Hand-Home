@@ -5,482 +5,1024 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Learning - The Golden Hand</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
+        :root {
+            --primary: #00d9ff;
+            --primary-dark: #00a8cc;
+            --accent: #ff006e;
+            --success: #00f5a0;
+            --warning: #ffd60a;
+            --danger: #ff006e;
+            --bg-dark: #0a0e27;
+            --bg-darker: #050812;
+            --bg-card: #1a1f3a;
+            --bg-hover: #252d4a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8d4;
+            --border-color: #2a3250;
+        }
+
+        * {
             font-family: 'Inter', sans-serif;
         }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
+
+        body {
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
         }
-        .card-hover {
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(180deg, var(--bg-card) 0%, rgba(26, 31, 58, 0.8) 100%);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 217, 255, 0.6); }
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navigation */
+        nav.desktop-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav.desktop-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
+            position: relative;
         }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+        nav.desktop-nav a:hover {
+            color: var(--primary);
         }
-        .audio-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .progress-bar {
-            height: 6px;
-            border-radius: 3px;
-            background-color: #e5e7eb;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
-            border-radius: 3px;
-        }
-        .filter-btn {
-            transition: all 0.2s ease;
-        }
-        .filter-btn.active {
-            background-color: #f59e0b;
-            color: white;
-        }
-        .language-badge {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            color: white;
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 0.75rem;
+
+        nav.desktop-nav a.active {
+            color: var(--primary);
             font-weight: 600;
         }
-        .audio-player {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border-radius: 12px;
-            padding: 20px;
+
+        nav.desktop-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
         }
+
+        nav.desktop-nav a:hover::after,
+        nav.desktop-nav a.active::after {
+            width: 100%;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(255, 0, 110, 0.2));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(255, 0, 110, 0.05) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Section Container */
+        .section-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(255, 0, 110, 0.05) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
         .play-btn {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--bg-dark);
+            font-size: 1.5rem;
             transition: all 0.3s ease;
+            cursor: pointer;
+            flex-shrink: 0;
         }
+
         .play-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
         }
+
+        .player-info h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .player-info p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Waveform */
+        .waveform-container {
+            margin-bottom: 1rem;
+        }
+
         .waveform {
             height: 40px;
-            background: linear-gradient(90deg, 
-                #f59e0b 0%, #f59e0b 30%, 
-                #e5e7eb 30%, #e5e7eb 100%);
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary) 30%, var(--border-color) 30%, var(--border-color) 100%);
             border-radius: 20px;
             position: relative;
             overflow: hidden;
         }
-        .waveform::before {
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Filters */
+        .filter-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .filter-item label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .filter-item select {
+            background: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-item select:hover,
+        .filter-item select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        /* Audio Grid */
+        .audio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .audio-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(255, 0, 110, 0.05) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .audio-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent 0%, transparent 29%, 
-                rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.3) 31%,
-                transparent 32%, transparent 49%,
-                rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.3) 51%,
-                transparent 52%, transparent 69%,
-                rgba(255,255,255,0.3) 70%, rgba(255,255,255,0.3) 71%,
-                transparent 72%, transparent 89%,
-                rgba(255,255,255,0.3) 90%, rgba(255,255,255,0.3) 91%,
-                transparent 92%, transparent 100%);
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .audio-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .audio-card:hover::before {
+            left: 100%;
+        }
+
+        .audio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .audio-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(255, 0, 110, 0.2));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .language-badge {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(255, 0, 110, 0.2));
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: 1px solid var(--border-color);
+        }
+
+        .audio-card h4 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 1;
+            line-height: 1.4;
+        }
+
+        .audio-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.5;
+        }
+
+        /* Audio Metadata */
+        .audio-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-item i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg-hover);
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* CTA Button */
+        .audio-card a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--bg-dark);
+            padding: 0.9rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .audio-card a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state .subtitle {
+            color: var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 1rem;
+            }
+
+            nav.desktop-nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .hero-section h2 {
+                font-size: 1.75rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .section-container {
+                padding: 1.5rem;
+            }
+
+            .audio-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .section-header h3 {
+                font-size: 1.5rem;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .filter-item {
+                width: 100%;
+            }
+
+            .filter-item select {
+                width: 100%;
+            }
+
+            .audio-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .player-header {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
     <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="w-10 h-10">
-                    <h1 class="text-xl font-bold text-gray-900">The Golden Hand</h1>
+    <header>
+        <div class="header-content">
+            <!-- Logo -->
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-hand-holding-heart"></i>
                 </div>
-
-                <!-- Desktop Navigation -->
-                <nav class="hidden md:flex space-x-8 font-medium text-gray-700">
-                    <a href="{{ url_for('main.index') }}" class="hover:text-yellow-600 transition duration-300">Home</a>
-                    <a href="{{ url_for('main.dashboard') }}" class="hover:text-yellow-600 transition duration-300">Dashboard</a>
-                    <a href="{{ url_for('lessons.index') }}" class="hover:text-yellow-600 transition duration-300">Lessons</a>
-                    <a href="{{ url_for('quiz.index') }}" class="hover:text-yellow-600 transition duration-300">Quiz</a>
-                    <a href="{{ url_for('audio.index') }}" class="text-yellow-600 font-semibold">Audio</a>
-                    <a href="{{ url_for('community.index') }}" class="hover:text-yellow-600 transition duration-300">Community</a>
-                    <a href="{{ url_for('ai.index') }}" class="hover:text-yellow-600 transition duration-300">iKhaya AI</a>
-                </nav>
-
-                <!-- User Menu -->
-                <div class="flex items-center space-x-4">
-                    <div class="hidden md:flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2">
-                        <i class="fas fa-headphones text-yellow-600"></i>
-                        <span class="text-sm font-medium">Audio Learner</span>
-                    </div>
-                    <button class="md:hidden focus:outline-none focus:ring-2 focus:ring-yellow-500" id="menu-btn">
-                        <i class="fas fa-bars text-xl text-gray-700"></i>
-                    </button>
-                </div>
+                <h1 class="logo-text">The Golden Hand</h1>
             </div>
 
-            <!-- Mobile Navigation -->
-            <nav class="md:hidden bg-white border-t border-gray-200 hidden" id="mobile-menu">
-                <a href="{{ url_for('main.index') }}" class="block px-4 py-3 border-b border-gray-200 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600">Home</a>
-                <a href="{{ url_for('main.dashboard') }}" class="block px-4 py-3 border-b border-gray-200 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600">Dashboard</a>
-                <a href="{{ url_for('lessons.index') }}" class="block px-4 py-3 border-b border-gray-200 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600">Lessons</a>
-                <a href="{{ url_for('quiz.index') }}" class="block px-4 py-3 border-b border-gray-200 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600">Quiz</a>
-                <a href="{{ url_for('audio.index') }}" class="block px-4 py-3 border-b border-gray-200 text-yellow-600 bg-yellow-50 font-semibold">Audio</a>
-                <a href="{{ url_for('community.index') }}" class="block px-4 py-3 border-b border-gray-200 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600">Community</a>
-                <a href="{{ url_for('ai.index') }}" class="block px-4 py-3 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600">iKhaya AI</a>
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <a href="{{ url_for('main.index') }}">Home</a>
+                <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('lessons.index') }}" class="active">Lessons</a>
+                <a href="{{ url_for('quiz.index') }}">Quiz</a>
+                <a href="{{ url_for('audio.index') }}">Audio</a>
+                <a href="{{ url_for('community.index') }}">Community</a>
+                <a href="{{ url_for('ai.index') }}">iKhaya AI</a>
             </nav>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-gradient text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="text-center max-w-3xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6">🔊 Audio Learning</h1>
-                <p class="text-xl text-blue-100 mb-8">Accessible offline education by subject and grade - Learn anywhere, anytime</p>
-                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                        <div class="flex items-center justify-center space-x-2">
-                            <i class="fas fa-wifi-slash text-yellow-300"></i>
-                            <span class="font-medium">Offline Access</span>
-                        </div>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                        <div class="flex items-center justify-center space-x-2">
-                            <i class="fas fa-language text-yellow-300"></i>
-                            <span class="font-medium">Multilingual</span>
-                        </div>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                        <div class="flex items-center justify-center space-x-2">
-                            <i class="fas fa-mobile-alt text-yellow-300"></i>
-                            <span class="font-medium">Mobile Friendly</span>
-                        </div>
-                    </div>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h2>🔊 Audio Learning</h2>
+            <p>Accessible offline education by subject and grade - Learn anywhere, anytime</p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-wifi-slash"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Offline Access</h3>
+                    <p>Learn without internet</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Multilingual</h3>
+                    <p>Multiple language support</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Mobile Friendly</h3>
+                    <p>Optimized for all devices</p>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Stats Section -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-            <div class="bg-white rounded-xl shadow-sm p-6 text-center">
-                <div class="text-3xl font-bold text-yellow-600 mb-2">48</div>
-                <div class="text-gray-600">Audio Lessons</div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">48</div>
+                <div class="stat-label">Audio Lessons</div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 text-center">
-                <div class="text-3xl font-bold text-yellow-600 mb-2">12.5</div>
-                <div class="text-gray-600">Hours of Content</div>
+            <div class="stat-card">
+                <div class="stat-value">12.5h</div>
+                <div class="stat-label">Hours of Content</div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 text-center">
-                <div class="text-3xl font-bold text-yellow-600 mb-2">4</div>
-                <div class="text-gray-600">Languages</div>
+            <div class="stat-card">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Languages</div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 text-center">
-                <div class="text-3xl font-bold text-yellow-600 mb-2">68%</div>
-                <div class="text-gray-600">Completed</div>
+            <div class="stat-card">
+                <div class="stat-value">68%</div>
+                <div class="stat-label">Completed</div>
             </div>
         </div>
 
         <!-- Currently Playing -->
-        <div class="audio-player mb-8">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="play-btn">
-                        <i class="fas fa-pause text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Mathematics - Algebra Basics</h3>
-                        <p class="text-gray-600 text-sm">Grade 10 • Chapter 3: Linear Equations</p>
-                    </div>
+        <div class="audio-player">
+            <div class="player-header">
+                <div class="play-btn">
+                    <i class="fas fa-pause"></i>
                 </div>
-                <div class="hidden md:block">
-                    <div class="waveform"></div>
-                    <div class="flex justify-between text-sm text-gray-500 mt-2">
-                        <span>12:45</span>
-                        <span>24:30</span>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:text-yellow-600">
-                        <i class="fas fa-step-backward"></i>
-                    </button>
-                    <button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:text-yellow-600">
-                        <i class="fas fa-step-forward"></i>
-                    </button>
+                <div class="player-info">
+                    <h3>Mathematics - Algebra Basics</h3>
+                    <p>Grade 10 • Chapter 3: Linear Equations</p>
                 </div>
             </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2">Download for Offline</h3>
-                        <p class="text-yellow-100 text-sm">24 lessons available offline</p>
-                    </div>
-                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-download text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2">Continue Learning</h3>
-                        <p class="text-blue-100 text-sm">Mathematics - 12 min remaining</p>
-                    </div>
-                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-play text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2">Your Playlists</h3>
-                        <p class="text-green-100 text-sm">3 custom playlists</p>
-                    </div>
-                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-music text-xl"></i>
-                    </div>
+            <div class="waveform-container">
+                <div class="waveform"></div>
+                <div class="time-display">
+                    <span>12:45</span>
+                    <span>24:30</span>
                 </div>
             </div>
         </div>
 
         <!-- Filters -->
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <h3 class="text-xl font-semibold text-gray-900">Audio Lessons</h3>
-                <div class="flex flex-wrap gap-4">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-sm text-gray-500">Grade:</span>
-                        <select class="bg-gray-100 border-0 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500">
-                            <option>All Grades</option>
-                            <option>1-3</option>
-                            <option>4-6</option>
-                            <option>7-9</option>
-                            <option>10-12</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-sm text-gray-500">Subject:</span>
-                        <select class="bg-gray-100 border-0 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500">
-                            <option>All Subjects</option>
-                            <option>Mathematics</option>
-                            <option>Science</option>
-                            <option>Languages</option>
-                            <option>History</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-sm text-gray-500">Language:</span>
-                        <select class="bg-gray-100 border-0 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500">
-                            <option>All Languages</option>
-                            <option>English</option>
-                            <option>isiZulu</option>
-                            <option>Sesotho</option>
-                            <option>Afrikaans</option>
-                        </select>
-                    </div>
+        <div class="filter-section">
+            <div class="filter-group">
+                <h3 style="width: 100%; margin-bottom: 1rem; font-size: 1.25rem; font-weight: 600;">Filter Audio Lessons</h3>
+                <div class="filter-item">
+                    <label for="grade-filter">Grade:</label>
+                    <select id="grade-filter">
+                        <option>All Grades</option>
+                        <option>1-3</option>
+                        <option>4-6</option>
+                        <option>7-9</option>
+                        <option>10-12</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="subject-filter">Subject:</label>
+                    <select id="subject-filter">
+                        <option>All Subjects</option>
+                        <option>Mathematics</option>
+                        <option>Science</option>
+                        <option>Languages</option>
+                        <option>History</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="language-filter">Language:</label>
+                    <select id="language-filter">
+                        <option>All Languages</option>
+                        <option>English</option>
+                        <option>isiZulu</option>
+                        <option>Sesotho</option>
+                        <option>Afrikaans</option>
+                    </select>
                 </div>
             </div>
         </div>
 
         <!-- Audio Lessons Grid -->
-        <div class="mb-12">
-            {% if audio_lessons %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {% for audio in audio_lessons %}
-                    <div class="audio-card shadow-sm card-hover">
-                        <div class="p-6">
-                            <div class="flex justify-between items-start mb-4">
-                                <div class="w-12 h-12 rounded-lg bg-yellow-100 flex items-center justify-center">
-                                    <i class="fas fa-headphones text-yellow-600 text-xl"></i>
-                                </div>
-                                <span class="language-badge">{{ audio.language }}</span>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ audio.title }}</h3>
-                            <p class="text-gray-600 mb-4">{{ audio.description }}</p>
-                            
-                            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                                <div class="flex items-center space-x-4">
-                                    <span class="flex items-center">
-                                        <i class="fas fa-clock mr-1"></i>
-                                        {{ audio.duration_minutes }} mins
-                                    </span>
-                                    <span class="flex items-center">
-                                        <i class="fas fa-graduation-cap mr-1"></i>
-                                        Grade {{ audio.grade_level }}
-                                    </span>
-                                </div>
-                                <span class="flex items-center text-yellow-600 font-medium">
-                                    <i class="fas fa-download mr-1"></i>
-                                    Offline
-                                </span>
-                            </div>
-                            
-                            <!-- Progress Bar -->
-                            <div class="mb-4">
-                                <div class="flex justify-between text-sm text-gray-500 mb-1">
-                                    <span>Progress</span>
-                                    <span>45%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 45%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <i class="fas fa-play-circle mr-1"></i>
-                                    <span>1.5k plays</span>
-                                </div>
-                                <a href="{{ url_for('audio.audio_details', audio_id=audio.id) }}"
-                                   class="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white font-medium px-4 py-2 rounded-lg transition duration-300">
-                                    <i class="fas fa-play mr-2 text-sm"></i>
-                                    Play
-                                </a>
-                            </div>
+        <div class="section-container">
+            <div class="audio-grid">
+                <!-- Mathematics Audio -->
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <div class="audio-icon">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <span class="language-badge">English</span>
+                    </div>
+                    <h4>Algebra Fundamentals</h4>
+                    <p>Master the basics of algebraic expressions, equations, and problem-solving techniques</p>
+                    <div class="audio-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>25 mins</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Grade 10</span>
                         </div>
                     </div>
-                    {% endfor %}
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span style="color: var(--primary);">45%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                    <a href="#">
+                        <span>Play Audio</span>
+                        <i class="fas fa-play"></i>
+                    </a>
                 </div>
-            {% else %}
-                <div class="bg-white rounded-xl shadow-sm p-12 text-center">
-                    <i class="fas fa-microphone-alt text-6xl text-gray-300 mb-4"></i>
-                    <h3 class="text-xl font-semibold text-gray-500 mb-2">No audio lessons available yet.</h3>
-                    <p class="text-gray-400">Audio content will be added soon!</p>
+
+                <!-- Science Audio -->
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <div class="audio-icon">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <span class="language-badge">isiZulu</span>
+                    </div>
+                    <h4>Chemistry Basics</h4>
+                    <p>Introduction to matter, elements, compounds, and chemical reactions</p>
+                    <div class="audio-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>18 mins</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Grade 9</span>
+                        </div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span style="color: var(--primary);">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <a href="#">
+                        <span>Play Audio</span>
+                        <i class="fas fa-play"></i>
+                    </a>
                 </div>
-            {% endif %}
+
+                <!-- English Audio -->
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <div class="audio-icon">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <span class="language-badge">English</span>
+                    </div>
+                    <h4>Grammar Essentials</h4>
+                    <p>Learn sentence structure, parts of speech, and punctuation rules</p>
+                    <div class="audio-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>22 mins</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Grade 8</span>
+                        </div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span style="color: var(--primary);">30%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 30%;"></div>
+                        </div>
+                    </div>
+                    <a href="#">
+                        <span>Play Audio</span>
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+
+                <!-- History Audio -->
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <div class="audio-icon">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <span class="language-badge">Sesotho</span>
+                    </div>
+                    <h4>World History Overview</h4>
+                    <p>Explore major historical events and their impact on modern society</p>
+                    <div class="audio-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>28 mins</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Grade 11</span>
+                        </div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span style="color: var(--primary);">60%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <a href="#">
+                        <span>Play Audio</span>
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+
+                <!-- Afrikaans Audio -->
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <div class="audio-icon">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <span class="language-badge">Afrikaans</span>
+                    </div>
+                    <h4>Wiskunde Beginsels</h4>
+                    <p>Leer die grondbeginsels van algebra en meetkunde</p>
+                    <div class="audio-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>20 mins</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Grade 9</span>
+                        </div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span style="color: var(--primary);">15%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 15%;"></div>
+                        </div>
+                    </div>
+                    <a href="#">
+                        <span>Play Audio</span>
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+
+            </div>
         </div>
 
-        <!-- Recently Played -->
-        <div class="mb-12">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Recently Played</h2>
-                <a href="#" class="text-yellow-600 hover:text-yellow-700 font-medium text-sm">View All</a>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div class="p-6">
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition duration-300">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
-                                    <i class="fas fa-headphones text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-900">Science - Biology Basics</h4>
-                                    <p class="text-sm text-gray-500">Grade 8 • 15 mins • English</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span class="text-sm text-gray-500">2 days ago</span>
-                                <button class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 hover:bg-yellow-200 transition duration-300">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition duration-300">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
-                                    <i class="fas fa-headphones text-green-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-900">History - Ancient Civilizations</h4>
-                                    <p class="text-sm text-gray-500">Grade 6 • 22 mins • isiZulu</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span class="text-sm text-gray-500">1 week ago</span>
-                                <button class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 hover:bg-yellow-200 transition duration-300">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Offline Learning Banner -->
-        <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
-            <div class="flex items-start">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-wifi-slash text-green-600 text-2xl mr-4 mt-1"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-green-800 mb-2">Offline Learning Available</h3>
-                    <p class="text-green-700 mb-4">Download audio lessons for offline learning - perfect for areas with limited internet connectivity! All audio content is optimized for low bandwidth and can be accessed without an internet connection.</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">Low Data Usage</span>
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">Background Play</span>
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">Sleep Timer</span>
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">Playback Speed</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 The Golden Hand. Empowering education through technology.</p>
+        </footer>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="flex items-center space-x-3 mb-6 md:mb-0">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="w-10 h-10">
-                    <h2 class="text-xl font-bold">The Golden Hand</h2>
-                </div>
-                <div class="text-center md:text-right">
-                    <p class="text-gray-400">© 2025 The Golden Hand. All rights reserved.</p>
-                    <p class="text-gray-400 mt-2">SIFISO SmartStudy SA - Reimagining African education</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Play button functionality
-        const playButtons = document.querySelectorAll('.play-btn');
-        playButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const icon = this.querySelector('i');
-                if (icon.classList.contains('fa-play')) {
-                    icon.classList.remove('fa-play');
-                    icon.classList.add('fa-pause');
-                } else {
-                    icon.classList.remove('fa-pause');
-                    icon.classList.add('fa-play');
-                }
-            });
-        });
-    </script>
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
